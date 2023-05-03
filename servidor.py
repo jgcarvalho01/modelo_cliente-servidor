@@ -1,11 +1,14 @@
 import socket
 
-HOST = 'localhost'  # endereço IP do servidor (em branco)
+HOST = 'localhost'  # endereço IP do servidor (na rede local)
 PORT = 5555  # porta do servidor
-ITEMS = ['One Piece', 'Naruto', 'Jujutsu Kaizen', 'Boku no Hero']  # lista de itens para votação
+ITEMS = ['One Piece', 'Naruto', 'Jujutsu Kaizen',
+         'Boku no Hero']  # lista de itens para votação
 VOTES = [0] * len(ITEMS)  # lista de votos inicializada com zeros
 
 # cria o socket do servidor
+# AF_INET: IPv4
+# SOCK_STREAM: TCP
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # associa o socket com o endereço e porta do servidor
@@ -22,15 +25,20 @@ votos = {item: 0 for item in ITEMS}
 # loop principal do servidor
 while True:
     # aguarda uma conexão
+    # conn é o socket da conexão com o cliente
+    # addr é uma tupla com o endereço IP e porta do cliente
     conn, addr = sock.accept()
     print(f"Conexão estabelecida com {addr}")
 
     # envia a lista de itens para o cliente
+    # encode converte a string para bytes
     conn.sendall(str(ITEMS).encode())
 
     # loop para receber a ação do cliente e processá-la
     while True:
         # recebe a ação do cliente
+        # dados com tamanho máximo de 1024 bytes
+        # converte os bytes para string
         data = conn.recv(1024).decode().strip()
         if not data:
             continue

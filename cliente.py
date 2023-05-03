@@ -1,5 +1,4 @@
 import socket
-import sys
 
 HOST = 'localhost'
 PORT = 5555
@@ -37,7 +36,6 @@ while True:
         nome_item = input("Digite o nome do item que deseja votar: ")
         sock.sendall(nome_item.encode())
         print("Voto computado!")
-
 
     # Se o cliente desejar ver o ranking dos itens, recebe o ranking do servidor e imprime
     elif acao == 'RANK':
